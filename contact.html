@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Book direct for the best rate — free breakfast, free parking, indoor corridors. (254) 675-8999.">
 <meta name="geo.region" content="US-TX">
 <meta name="geo.placename" content="Clifton, Texas">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://maps.google.com https://www.google.com; connect-src 'self' https://*.workers.dev https://formsubmit.co; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://maps.google.com https://www.google.com; connect-src 'self' https://*.workers.dev https://api.web3forms.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index, follow">
 <meta name="copyright" content="© 2026 Velkommen Inn, Clifton, Texas. All rights reserved.">
@@ -104,7 +104,7 @@
           <div class="cform">
             <h3>Send us a message</h3>
             <div class="sub">Type your message below and it goes straight to our inbox at info@velkommeninncliftontx.com. We reply as quickly as we can — for anything urgent or same-day, please call (254) 675-8999.</div>
-            <form action="https://api.web3forms.com/submit" method="POST">
+            <form id="vkContactForm" action="https://api.web3forms.com/submit" method="POST">
               <input type="hidden" name="access_key" value="5d7ae36b-bd70-416e-ac8a-d06dae30c9a4">
             <input type="hidden" name="subject" value="New message from velkommeninncliftontx.com — Contact Form">
             <input type="hidden" name="from_name" value="Velkommen Inn Website">
@@ -264,18 +264,46 @@
 <script src="script.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  if(location.search.indexOf('sent=1') !== -1){
-    var f = document.querySelector('form[action*="web3forms"]');
-    if(f){
-      var b = document.createElement('div');
-      b.setAttribute('role','status');
-      b.style.cssText = 'background:#EAF6EC;border:1px solid #BFE3C6;color:#1E5A2A;border-radius:12px;padding:16px 18px;margin-bottom:18px;font-weight:600';
-      b.textContent = "\u2713 Message sent! Thank you \u2014 we\u2019ll get back to you shortly. Need us faster? Call (254) 675-8999 \u2014 24-hour front desk.";
-      f.parentNode.insertBefore(b, f);
-      b.scrollIntoView({block:'center', behavior:'smooth'});
-      f.reset();
+  var form = document.getElementById('vkContactForm');
+  if(!form) return;
+
+  function showBox(ok){
+    var b = document.createElement('div');
+    b.setAttribute('role','status');
+    if(ok){
+      b.style.cssText = 'background:#EAF6EC;border:1.5px solid #BFE3C6;color:#1E5A2A;border-radius:14px;padding:26px 22px;text-align:center';
+      b.innerHTML = '<div style="font-size:34px;line-height:1;margin-bottom:10px">\u2713</div>'
+        + '<div style="font-family:Fraunces,serif;font-size:20px;font-weight:600;margin-bottom:8px">Thanks! Your message was sent successfully.</div>'
+        + '<div style="font-size:14px">We\u2019ll get back to you shortly. Need us faster? Call <strong>(254) 675-8999</strong> \u2014 24-hour front desk.</div>';
+      form.style.display = 'none';
+      form.parentNode.insertBefore(b, form);
+    } else {
+      b.style.cssText = 'background:#FDECEA;border:1.5px solid #F2C1BC;color:#7A2018;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:14px;font-weight:600';
+      b.textContent = "Sorry \u2014 the message couldn\u2019t send just now. Please try again, or call (254) 675-8999 / email info@velkommeninncliftontx.com.";
+      form.parentNode.insertBefore(b, form);
+      setTimeout(function(){ b.remove(); }, 9000);
     }
+    b.scrollIntoView({block:'center', behavior:'smooth'});
   }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"], .btn');
+    var orig = btn ? btn.textContent : '';
+    if(btn){ btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+    var data = new FormData(form);
+    data.delete('redirect');
+    fetch('https://api.web3forms.com/submit', { method:'POST', body:data, headers:{ 'Accept':'application/json' } })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(j && j.success){ showBox(true); }
+        else { throw new Error('send failed'); }
+      })
+      .catch(function(){ showBox(false); if(btn){ btn.disabled = false; btn.textContent = orig; } });
+  });
+
+  // no-JS fallback returns here with ?sent=1
+  if(location.search.indexOf('sent=1') !== -1){ showBox(true); }
 });
 </script>
 </body>
