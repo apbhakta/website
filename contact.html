@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Book direct for the best rate — free breakfast, free parking, indoor corridors. (254) 675-8999.">
 <meta name="geo.region" content="US-TX">
 <meta name="geo.placename" content="Clifton, Texas">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://maps.google.com https://www.google.com; connect-src 'self' https://*.workers.dev https://formsubmit.co; form-action https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://maps.google.com https://www.google.com; connect-src 'self' https://*.workers.dev https://formsubmit.co; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index, follow">
 <meta name="copyright" content="© 2026 Velkommen Inn, Clifton, Texas. All rights reserved.">
@@ -104,10 +104,12 @@
           <div class="cform">
             <h3>Send us a message</h3>
             <div class="sub">Type your message below and it goes straight to our inbox at info@velkommeninncliftontx.com. We reply as quickly as we can — for anything urgent or same-day, please call (254) 675-8999.</div>
-            <form action="https://formsubmit.co/info@velkommeninncliftontx.com" method="POST">
-              <input type="hidden" name="_subject" value="Website message — Velkommen Inn">
-              <input type="hidden" name="_template" value="table">
-              <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+            <form action="https://api.web3forms.com/submit" method="POST">
+              <input type="hidden" name="access_key" value="5d7ae36b-bd70-416e-ac8a-d06dae30c9a4">
+            <input type="hidden" name="subject" value="New message from velkommeninncliftontx.com — Contact Form">
+            <input type="hidden" name="from_name" value="Velkommen Inn Website">
+            <input type="hidden" name="redirect" value="https://www.velkommeninncliftontx.com/contact.html?sent=1">
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none !important" aria-hidden="true">
               <label for="cf-name">Your name</label>
               <input id="cf-name" type="text" name="name" required autocomplete="name" maxlength="100">
               <label for="cf-email">Email</label>
@@ -260,5 +262,21 @@
 </footer>
 
 <script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(location.search.indexOf('sent=1') !== -1){
+    var f = document.querySelector('form[action*="web3forms"]');
+    if(f){
+      var b = document.createElement('div');
+      b.setAttribute('role','status');
+      b.style.cssText = 'background:#EAF6EC;border:1px solid #BFE3C6;color:#1E5A2A;border-radius:12px;padding:16px 18px;margin-bottom:18px;font-weight:600';
+      b.textContent = "\u2713 Message sent! Thank you \u2014 we\u2019ll get back to you shortly. Need us faster? Call (254) 675-8999 \u2014 24-hour front desk.";
+      f.parentNode.insertBefore(b, f);
+      b.scrollIntoView({block:'center', behavior:'smooth'});
+      f.reset();
+    }
+  }
+});
+</script>
 </body>
 </html>
