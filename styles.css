@@ -704,3 +704,13 @@ footer{border-top:3px solid transparent;border-image:linear-gradient(90deg,trans
 body.ck-open .vk-chat-btn{bottom:170px}
 body.ck-open .vk-chat{bottom:236px}
 @media(max-width:760px){body.ck-open .vk-chat-btn{bottom:215px}body.ck-open .vk-chat{bottom:275px}}
+
+/* Guest Services button: compact icon-only (all screens) */
+.vk-chat-btn{font-size:0;width:58px;height:58px;padding:0;border-radius:50%;justify-content:center;gap:0}
+.vk-chat-btn svg{width:26px;height:26px;flex-shrink:0}
+.vk-chat-btn:hover{transform:scale(1.08)}
+@media(max-width:760px){
+  .vk-chat-btn{width:50px;height:50px;right:14px;bottom:14px}
+  .vk-chat-btn svg{width:23px;height:23px}
+  body.ck-open .vk-chat-btn{bottom:215px}
+}
