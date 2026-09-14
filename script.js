@@ -52,7 +52,7 @@ var VK_KB = [
  {k:['cat','cats','kitten'], w:3,
   a:'We\'re sorry — Velkommen Inn accepts <strong>dogs only</strong>. Cats and other pets are not permitted. ADA service animals are always welcome at no charge.', c:['Pet policy','Service animals']},
  {k:['pet fee','pet fees','dog fee','how much for dog','cost for pet'], w:3,
-  a:'Pet fees (charged separately): <strong>1 dog / 1 night: $35</strong> · <strong>2 dogs / 1 night: $50</strong> · <strong>1 dog / 2 nights: $50</strong> · <strong>2 dogs / 2 nights: $60</strong>. Longer stays: call <strong>(254) 675-8999</strong>. Undisclosed pets: $150 per day per pet.', c:['Pet policy','Book a room']},
+  a:'Pet fees (charged separately): <strong>1 dog / 1 night: $35</strong> · <strong>2 dogs / 1 night: $50</strong> · <strong>1 dog / 2 nights: $50</strong> · <strong>2 dogs / 2 nights: $60</strong>. Longer stays: call <strong>(254) 675-8999</strong>. Undisclosed pets: $150 per day per pet. <strong>Pet fees are collected only by Velkommen Inn at check-in</strong> \u2014 third-party booking sites are not authorized to collect or quote them.', c:['Pet policy','Book a room']},
  {k:['service animal','service dog','esa','emotional support'], w:3,
   a:'<strong>Service animals</strong> as defined by the ADA are always welcome at no charge — they\'re never treated as pets. Please let us know at booking so we can prepare. (Note: emotional support animals are not service animals under the ADA; our standard dogs-only pet policy and fees apply to them.)', c:['Pet policy','ADA rooms']},
  {k:['smoke','smoking','vape','vaping','cigarette','non-smoking','non smoking'], w:2,
