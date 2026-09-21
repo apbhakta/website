@@ -32,6 +32,19 @@
 <link rel="stylesheet" href="styles.css">
 
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "Velkommen Inn — Clifton, Texas Hotel Tour",
+  "description": "A video look around Velkommen Inn in Clifton, Texas — the Norwegian Capital of Texas. Rooms, lobby, pool, and more.",
+  "thumbnailUrl": "https://www.velkommeninncliftontx.com/images/video-poster.jpg",
+  "contentUrl": "https://www.velkommeninncliftontx.com/videos/velkommen-tour.mp4",
+  "uploadDate": "2026-09-15",
+  "duration": "PT37S",
+  "publisher": {"@type": "Organization", "name": "Velkommen Inn"}
+}
+</script>
 </head></head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -127,30 +140,12 @@
 
       <!-- ---------- VIDEOS ---------- -->
       <div class="gpane" id="gpane-videos" role="tabpanel" aria-label="Videos">
-        <!-- TO ADD REAL VIDEOS: replace a .vposter div with either
-             <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="..." allowfullscreen></iframe>
-             or <video controls poster="images/poster.jpg"><source src="videos/tour.mp4" type="video/mp4"></video> -->
-        <div class="video-grid">
-          <div class="video-card">
-            <div class="vposter photo dusk" onclick="vmsg(this)"><div class="nordic"></div><div class="vplay"><svg width="24" height="24" viewBox="0 0 24 24" fill="#6C1A2E"><path d="M8 5v14l11-7z"/></svg></div></div>
-            <div class="vbody"><h3>Hotel walkthrough</h3><p>A guided look at the lobby, indoor corridors, and rooms.</p></div>
-          </div>
-          <div class="video-card">
-            <div class="vposter photo pool" onclick="vmsg(this)"><div class="nordic"></div><div class="vplay"><svg width="24" height="24" viewBox="0 0 24 24" fill="#6C1A2E"><path d="M8 5v14l11-7z"/></svg></div></div>
-            <div class="vbody"><h3>Pool &amp; amenities</h3><p>The seasonal outdoor pool, fitness center, and breakfast area.</p></div>
-          </div>
-          <div class="video-card">
-            <div class="vposter photo field" onclick="vmsg(this)"><div class="nordic"></div><div class="vplay"><svg width="24" height="24" viewBox="0 0 24 24" fill="#6C1A2E"><path d="M8 5v14l11-7z"/></svg></div></div>
-            <div class="vbody"><h3>Explore Clifton</h3><p>Lake Whitney, Meridian State Park, and the Norwegian Capital of Texas.</p></div>
-          </div>
-          <div class="video-card">
-            <div class="vposter photo warm" onclick="vmsg(this)"><div class="nordic"></div><div class="vplay"><svg width="24" height="24" viewBox="0 0 24 24" fill="#6C1A2E"><path d="M8 5v14l11-7z"/></svg></div></div>
-            <div class="vbody"><h3>Room tours</h3><p>Inside our 2 Queen, King, and ADA-accessible rooms.</p></div>
-          </div>
-        </div>
-        <div class="tour-note">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B8873B" stroke-width="2" style="flex-shrink:0;margin-top:2px"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M22 8l-5 4 5 4V8z"/></svg>
-          <p><strong>Videos coming soon.</strong> We&rsquo;re filming fresh walkthroughs of the hotel and the Clifton area. Follow along or call <strong>(254) 675-8999</strong> with any questions in the meantime.</p>
+        <div style="max-width:960px">
+          <video controls preload="metadata" playsinline poster="images/video-poster.jpg" style="width:100%;border-radius:14px;border:1px solid var(--line);box-shadow:0 14px 40px rgba(48,22,34,.15);background:#000" aria-label="Velkommen Inn video tour">
+            <source src="videos/velkommen-tour.mp4" type="video/mp4">
+            Your browser does not support video playback &mdash; view our photo gallery above, or call (254) 675-8999.
+          </video>
+          <p style="font-size:13.5px;color:var(--ink-soft);margin-top:12px">Velkommen Inn &mdash; a quick look around our Clifton, Texas hotel. <span style="color:#8A6222">More videos coming soon.</span></p>
         </div>
       </div>
     </div>
