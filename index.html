@@ -166,16 +166,15 @@
           </div>
         </div>
         <div class="field">
-          <label for="rt">Room type</label>
-          <select id="rt">
-            <option>Any available room</option>
-            <option>2 Queen Beds · Non-Smoking</option>
-            <option>1 King Bed</option>
-            <option>1 King Bed · ADA Accessible</option>
-            <option>2 Queen Beds · ADA Accessible</option>
+          <label for="gs">Guests</label>
+          <select id="gs">
+            <option value="1">1 Adult</option>
+            <option value="2" selected>2 Adults</option>
+            <option value="3">3 Adults</option>
+            <option value="4">4 Adults</option>
           </select>
         </div>
-        <a class="btn btn-book" href="https://reservation.asiwebres.com/v5/RoomAvailability.aspx?id=6e5e44aa3b1b4949b6ed9c297569f595&lang=en&Curr=1" target="_blank" rel="noopener">Check Rates &amp; Book</a>
+        <a class="btn btn-book" id="vkBookBtn" onclick="return vkBook(event)" href="https://reservation.asiwebres.com/v5/RoomAvailability.aspx?id=6e5e44aa3b1b4949b6ed9c297569f595&lang=en&Curr=1" target="_blank" rel="noopener">Check Rates &amp; Book</a>
         <div class="direct-line">Prefer to talk? Call <strong>(254) 675-8999</strong> — 24-hour front desk.</div>
       </div>
     </div>

@@ -419,14 +419,42 @@ function vmsg(el){
   setTimeout(function(){b.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="#6C1A2E"><path d="M8 5v14l11-7z"/></svg>';},1400);
 }
 
-// Set sensible default dates
+// ===== Booking widget: defaults + send dates to the booking engine =====
+function vkYmd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function vkAddDays(ymd, n){ var p=ymd.split('-'); var d=new Date(+p[0], +p[1]-1, +p[2]); d.setDate(d.getDate()+n); return vkYmd(d); }
+function vkMdy(ymd){ var p=ymd.split('-'); return p[1]+'/'+p[2]+'/'+p[0]; }
 (function(){
-  var t=new Date(), tm=new Date(Date.now()+864e5);
-  function f(d){return d.toISOString().slice(0,10);}
   var ci=document.getElementById('ci'), co=document.getElementById('co');
-  if(ci){ci.value=f(t);ci.min=f(t);}
-  if(co){co.value=f(tm);co.min=f(t);}
+  if(!ci || !co) return;
+  var today = vkYmd(new Date());               // local date, not UTC
+  ci.value = today; ci.min = today;
+  co.value = vkAddDays(today, 1); co.min = vkAddDays(today, 1);
+  // keep check-out after check-in automatically
+  ci.addEventListener('change', function(){
+    if(!ci.value) return;
+    co.min = vkAddDays(ci.value, 1);
+    if(!co.value || co.value <= ci.value){ co.value = vkAddDays(ci.value, 1); }
+  });
+  co.addEventListener('change', function(){
+    if(ci.value && co.value && co.value <= ci.value){ co.value = vkAddDays(ci.value, 1); }
+  });
 })();
+function vkBookUrl(){
+  var ci=document.getElementById('ci'), co=document.getElementById('co'), g=document.getElementById('gs');
+  var url = VK_BOOK;
+  if(ci && co && ci.value && co.value && co.value > ci.value){
+    url += '&Operation=date&txtCheckInDate=' + encodeURIComponent(vkMdy(ci.value))
+         + '&txtCheckOutDate=' + encodeURIComponent(vkMdy(co.value));
+    if(g && g.value){ url += '&txtAdult=' + encodeURIComponent(g.value); }
+  }
+  return url;
+}
+function vkBook(e){
+  var btn = e && e.currentTarget;
+  var url = vkBookUrl();
+  if(btn){ btn.href = url; }                    // the link itself now carries the dates
+  return true;                                  // let the normal new-tab link open
+}
 
 // ===== Cookie consent =====
 function ckGet(){ try{ return JSON.parse(localStorage.getItem('vk_consent')||'null'); }catch(e){ return null; } }
