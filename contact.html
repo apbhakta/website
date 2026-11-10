@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Book direct for the best rate — free breakfast, free parking, indoor corridors. (254) 675-8999.">
 <meta name="geo.region" content="US-TX">
 <meta name="geo.placename" content="Clifton, Texas">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://maps.google.com https://www.google.com; connect-src 'self' https://*.workers.dev https://api.web3forms.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://js.hcaptcha.com https://hcaptcha.com https://*.hcaptcha.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://hcaptcha.com https://*.hcaptcha.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://maps.google.com https://www.google.com https://hcaptcha.com https://*.hcaptcha.com; connect-src 'self' https://*.workers.dev https://api.web3forms.com https://hcaptcha.com https://*.hcaptcha.com; form-action https://api.web3forms.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index, follow">
 <meta name="copyright" content="© 2026 Velkommen Inn, Clifton, Texas. All rights reserved.">
@@ -128,6 +128,9 @@
               </select>
               <label for="cf-msg">Message</label>
               <textarea id="cf-msg" name="message" required maxlength="3000" placeholder="How can we help?"></textarea>
+              <div class="vk-human" style="margin:4px 0 14px">
+                <div class="h-captcha" data-sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2" data-callback="vkCaptchaOk"></div>
+              </div>
               <button class="btn btn-book" type="submit">Send Message</button>
               <div class="privacy-note">By sending, you agree to our <a style="cursor:pointer;text-decoration:underline" onclick="go('privacy')">Privacy Policy</a>. Please don't include credit-card numbers in messages.</div>
             </form>
@@ -262,6 +265,7 @@
 </footer>
 
 <script src="script.js"></script>
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var form = document.getElementById('vkContactForm');
@@ -286,20 +290,54 @@ document.addEventListener('DOMContentLoaded', function(){
     b.scrollIntoView({block:'center', behavior:'smooth'});
   }
 
+  var openedAt = Date.now();
+  window.vkCaptchaOk = function(){ var n=document.getElementById('vkFormErr'); if(n) n.remove(); };
+
+  function showErr(msg){
+    var old=document.getElementById('vkFormErr'); if(old) old.remove();
+    var b=document.createElement('div'); b.id='vkFormErr'; b.setAttribute('role','alert');
+    b.style.cssText='background:#FDECEA;border:1.5px solid #F2C1BC;color:#7A2018;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:14px;font-weight:600';
+    b.textContent=msg; form.parentNode.insertBefore(b, form);
+    b.scrollIntoView({block:'center', behavior:'smooth'});
+  }
+  function resetCaptcha(){ try{ if(window.hcaptcha) hcaptcha.reset(); }catch(x){} }
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    var btn = form.querySelector('button[type="submit"], .btn');
+    var msg = (form.querySelector('[name=message]').value||'');
+    var name = (form.querySelector('[name=name]').value||'');
+
+    // Filter 1 - hidden trap field: people never see it, bots fill it in
+    var trap = form.querySelector('[name=botcheck]');
+    if(trap && trap.checked){ showBox(true); return; }   // pretend success, send nothing
+
+    // Filter 2 - too fast: a person can't fill this form in under 4 seconds
+    if(Date.now() - openedAt < 4000){ showErr('Please take a moment to complete the form, then press Send again.'); return; }
+
+    // Filter 3 - link spam: guests rarely paste web links
+    var links = (msg.match(/https?:\/\/|www\.|\[url|<a\s/gi) || []).length;
+    if(links > 1 || /https?:\/\/|www\./i.test(name)){ showErr('For security, messages can’t contain web links. Please remove them and try again — or call (254) 675-8999.'); return; }
+
+    // Filter 4 - one message per minute from the same browser
+    var last = 0; try{ last = +localStorage.getItem('vk_last_msg') || 0; }catch(x){}
+    if(Date.now() - last < 60000){ showErr('Your message is already on its way. Please wait a minute before sending another.'); return; }
+
+    // Human check (hCaptcha)
+    var tok = form.querySelector('[name="h-captcha-response"]');
+    if(!tok || !tok.value){ showErr('Please tick the “I am human” box above the Send button.'); return; }
+
+    var btn = form.querySelector('button[type="submit"]');
     var orig = btn ? btn.textContent : '';
-    if(btn){ btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+    if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
     var data = new FormData(form);
     data.delete('redirect');
     fetch('https://api.web3forms.com/submit', { method:'POST', body:data, headers:{ 'Accept':'application/json' } })
       .then(function(r){ return r.json(); })
       .then(function(j){
-        if(j && j.success){ showBox(true); }
+        if(j && j.success){ try{ localStorage.setItem('vk_last_msg', String(Date.now())); }catch(x){} showBox(true); }
         else { throw new Error('send failed'); }
       })
-      .catch(function(){ showBox(false); if(btn){ btn.disabled = false; btn.textContent = orig; } });
+      .catch(function(){ showBox(false); resetCaptcha(); if(btn){ btn.disabled = false; btn.textContent = orig; } });
   });
 
   // no-JS fallback returns here with ?sent=1
